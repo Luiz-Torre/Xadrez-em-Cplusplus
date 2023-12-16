@@ -2,21 +2,53 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <string>
+
+using namespace std;
 
 PecasBrancas::PecasBrancas() {
-    x; 
-    y; 
+    x = 0; 
+    y= 0 ;
+    tipo = PEAO; // Valor padrão, mas pode ser ajustado com setTipo()
     textura = nullptr; 
 }
 
-bool PecasBrancas::estaDentro(int x = -100, int y = -100) {
-    if (x >= this->x && x <= (this->x + 100) && y >= this->y && y <= (this->y + 100)) {
+bool PecasBrancas::estaDentro(int x = -100, int y = -100, SDL_Renderer* renderer = NULL, int turno = -1) {
+    if (x >= this->x && x <= (this->x + 100) && y >= this->y && y <= (this->y + 100) && turno == 1) {
+        SDL_Rect rect;
+        SDL_SetRenderDrawColor(renderer, 40, 185, 185, 0); // Azul para o quadrado clicado
+        x = (x / 100) * 100;
+        y = (y / 100) * 100;
+        rect = { x, y, 100, 100 };
+        SDL_RenderFillRect(renderer, &rect);
+           
         return true;
-    } else {
+    }
+    else{
         return false;
     }
 }
 
+void PecasBrancas::move_peca(int novoX, int novoY) {
+    if (tipo == PEAO) {
+        int deltaY = y - novoY; // Diferença no eixo Y (considerando movimento de baixo para cima)
+        int deltaX = abs(x - novoX); // Diferença absoluta no eixo X
+
+        // Primeiro movimento: pode mover 2 casas para frente
+        bool primeiroMovimento = (y == 600); // Supondo que a posição inicial dos peões seja y=600
+
+        // Movimento padrão: 1 casa para frente
+        bool movimentoPadrao = (deltaY == 100 && deltaX == 0);
+
+        // Movimento de captura: 1 casa diagonal
+        bool movimentoCaptura = (deltaY == 100 && deltaX == 100); // Supondo que você tem uma lógica para verificar se há uma peça para capturar
+
+        if ((primeiroMovimento && deltaY <= 200) || movimentoPadrao || movimentoCaptura) {
+            setX(novoX);
+            setY(novoY);
+        }
+    }
+}
 
 
 SDL_Texture* PecasBrancas::getTextura() const {
@@ -26,6 +58,12 @@ SDL_Texture* PecasBrancas::getTextura() const {
 int PecasBrancas::getX() const {
     return x;
 }
+
+TipoPeca PecasBrancas::getTipo() const {
+    return tipo;
+}
+
+
 
 int PecasBrancas::getY() const {
     return y;
@@ -40,6 +78,10 @@ void PecasBrancas::setX(int novoX) {
 
 void PecasBrancas::setY(int novoY) {
     y = novoY;
+}
+
+void PecasBrancas::setTipo(TipoPeca novoTipo) {
+    tipo = novoTipo;
 }
 
 std::vector<PecasBrancas> PecasBrancas::criarPecasBrancas(SDL_Renderer* renderer) {
@@ -98,6 +140,6 @@ std::vector<PecasBrancas> PecasBrancas::criarPecasBrancas(SDL_Renderer* renderer
 
         return pecas;
 
-    }
+}
 
 

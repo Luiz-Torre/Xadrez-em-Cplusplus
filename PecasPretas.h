@@ -14,6 +14,7 @@ private:
 
 public:
     PecasPretas(); // Construtor sem parâmetros
+    void estaDentro(int x, int y, SDL_Renderer* renderer, int turno);
 
    // Getters
     int getId() const;

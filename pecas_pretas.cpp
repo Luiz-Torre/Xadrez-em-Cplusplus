@@ -4,10 +4,19 @@
 #include <SDL2/SDL_image.h>
 
 PecasPretas::PecasPretas() {
-    id; 
-    x; 
-    y; 
+    x = 0; 
+    y= 0 ; 
     textura = nullptr; 
+}
+void PecasPretas::estaDentro(int x = -100, int y = -100, SDL_Renderer* renderer = NULL, int turno = -1) {
+    if (x >= this->x && x <= (this->x + 100) && y >= this->y && y <= (this->y + 100) && turno == 2) {
+        SDL_Rect rect;
+        SDL_SetRenderDrawColor(renderer, 40, 185, 185, 0); // Azul para o quadrado clicado
+        x = (x / 100) * 100;
+        y = (y / 100) * 100;
+        rect = { x, y, 100, 100 };
+        SDL_RenderFillRect(renderer, &rect);
+    }
 }
 
 int PecasPretas::getId() const {

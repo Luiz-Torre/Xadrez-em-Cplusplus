@@ -1,6 +1,6 @@
 # Variáveis para os compiladores e flags
 CC=g++
-CFLAGS=-Wall -lSDL2 -lSDL2_image -Wno-invalid-memory-model -Wno-unused-variable  -Wunused-value -Wunused-value
+CFLAGS=-Wall -lSDL2 -lSDL2_image
 TARGET=xadrez
 
 # Lista de arquivos fonte
